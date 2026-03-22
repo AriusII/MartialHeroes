@@ -1,6 +1,8 @@
-﻿namespace MartialHeroes.Explorer.ViewModels;
+using MartialHeroes.Tools.Shared.Navigation;
 
-public partial class MainWindowViewModel : ViewModelBase
+namespace MartialHeroes.Explorer.ViewModels;
+
+public class MainWindowViewModel(NavigationService navigationService) : ViewModelBase
 {
-	public string Greeting { get; } = "Welcome to Avalonia!";
+	public NavigationService Navigation { get; } = navigationService;
 }

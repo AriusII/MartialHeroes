@@ -3,13 +3,202 @@
              x:Class="MartialHeroes.Explorer.App"
              xmlns:local="using:MartialHeroes.Explorer"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-  
-    <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+	<Application.DataTemplates>
+		<local:ViewLocator />
+	</Application.DataTemplates>
+
+	<!--
+        All custom brushes use opaque, clearly visible colors — no Fluent WinUI
+        semi-transparent overlay resources (TextFillColor*, SubtleFillColor*, etc.)
+        which are near-invisible on plain dark window backgrounds.
+    -->
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+
+				<ResourceDictionary x:Key="Dark">
+					<!-- Surfaces -->
+					<SolidColorBrush x:Key="AppWindowBrush" Color="#111111" />
+					<SolidColorBrush x:Key="AppSurfaceBrush" Color="#1E1E1E" />
+					<SolidColorBrush x:Key="AppSurfaceAltBrush" Color="#262626" />
+					<SolidColorBrush x:Key="AppToolbarBrush" Color="#161616" />
+					<SolidColorBrush x:Key="AppSidebarBrush" Color="#151515" />
+					<SolidColorBrush x:Key="AppStatusBarBrush" Color="#161616" />
+					<SolidColorBrush x:Key="AppPathBgBrush" Color="#0D0D0D" />
+					<!-- Borders / separators -->
+					<SolidColorBrush x:Key="AppBorderBrush" Color="#303030" />
+					<SolidColorBrush x:Key="AppSeparatorBrush" Color="#2A2A2A" />
+					<!-- Text -->
+					<SolidColorBrush x:Key="AppForegroundBrush" Color="#F0F0F0" />
+					<SolidColorBrush x:Key="AppForegroundSecondaryBrush" Color="#A0A0A0" />
+					<SolidColorBrush x:Key="AppForegroundTertiaryBrush" Color="#585858" />
+					<!-- Accent -->
+					<SolidColorBrush x:Key="AppAccentBrush" Color="#0078D4" />
+					<SolidColorBrush x:Key="AppAccentForegroundBrush" Color="#60CDFF" />
+					<!-- Semantic -->
+					<SolidColorBrush x:Key="AppSuccessBrush" Color="#4CAF50" />
+					<SolidColorBrush x:Key="AppAmberBrush" Color="#FCB045" />
+					<SolidColorBrush x:Key="AppDirtyBackgroundBrush" Color="#28FCB045" />
+					<SolidColorBrush x:Key="AppErrorBrush" Color="#F44747" />
+					<SolidColorBrush x:Key="AppErrorBgBrush" Color="#28F44747" />
+				</ResourceDictionary>
+
+				<ResourceDictionary x:Key="Light">
+					<!-- Surfaces -->
+					<SolidColorBrush x:Key="AppWindowBrush" Color="#EBEBEB" />
+					<SolidColorBrush x:Key="AppSurfaceBrush" Color="#FFFFFF" />
+					<SolidColorBrush x:Key="AppSurfaceAltBrush" Color="#F5F5F5" />
+					<SolidColorBrush x:Key="AppToolbarBrush" Color="#FFFFFF" />
+					<SolidColorBrush x:Key="AppSidebarBrush" Color="#F5F5F5" />
+					<SolidColorBrush x:Key="AppStatusBarBrush" Color="#FAFAFA" />
+					<SolidColorBrush x:Key="AppPathBgBrush" Color="#F0F0F0" />
+					<!-- Borders / separators -->
+					<SolidColorBrush x:Key="AppBorderBrush" Color="#E0E0E0" />
+					<SolidColorBrush x:Key="AppSeparatorBrush" Color="#E5E5E5" />
+					<!-- Text -->
+					<SolidColorBrush x:Key="AppForegroundBrush" Color="#1A1A1A" />
+					<SolidColorBrush x:Key="AppForegroundSecondaryBrush" Color="#5A5A5A" />
+					<SolidColorBrush x:Key="AppForegroundTertiaryBrush" Color="#9A9A9A" />
+					<!-- Accent -->
+					<SolidColorBrush x:Key="AppAccentBrush" Color="#0067C0" />
+					<SolidColorBrush x:Key="AppAccentForegroundBrush" Color="#0058A3" />
+					<!-- Semantic -->
+					<SolidColorBrush x:Key="AppSuccessBrush" Color="#107C10" />
+					<SolidColorBrush x:Key="AppAmberBrush" Color="#C47800" />
+					<SolidColorBrush x:Key="AppDirtyBackgroundBrush" Color="#20C47800" />
+					<SolidColorBrush x:Key="AppErrorBrush" Color="#C42B2B" />
+					<SolidColorBrush x:Key="AppErrorBgBrush" Color="#18C42B2B" />
+				</ResourceDictionary>
+
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
+
+	<Application.Styles>
+		<FluentTheme />
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+
+		<!-- Window background -->
+		<Style Selector="Window">
+			<Setter Property="Background" Value="{DynamicResource AppWindowBrush}" />
+		</Style>
+
+		<!-- ── DataGrid ── -->
+		<Style Selector="DataGrid">
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundBrush}" />
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+			<Setter Property="RowBackground" Value="{DynamicResource AppSurfaceBrush}" />
+		</Style>
+		<Style Selector="DataGridColumnHeader">
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="Padding" Value="10,8" />
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundSecondaryBrush}" />
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
+		</Style>
+		<Style Selector="DataGridRow">
+			<Setter Property="MinHeight" Value="32" />
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundBrush}" />
+		</Style>
+		<Style Selector="DataGridCell">
+			<Setter Property="FontSize" Value="13" />
+			<Setter Property="Padding" Value="8,4" />
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundBrush}" />
+		</Style>
+		<Style Selector="DataGridCell TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundBrush}" />
+		</Style>
+		<Style Selector="DataGridCell TextBox">
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundBrush}" />
+		</Style>
+
+		<!-- ── TreeView ── -->
+		<Style Selector="TreeViewItem">
+			<Setter Property="Padding" Value="4,1" />
+			<Setter Property="MinHeight" Value="26" />
+		</Style>
+
+		<!-- ── Card surfaces ── -->
+		<Style Selector="Border.card">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="10" />
+			<Setter Property="Padding" Value="24" />
+		</Style>
+		<Style Selector="Border.cardSecondary">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="8" />
+			<Setter Property="Padding" Value="14" />
+		</Style>
+
+		<!-- ── Dirty indicator badge ── -->
+		<Style Selector="Border.dirtyBadge">
+			<Setter Property="Background" Value="{DynamicResource AppDirtyBackgroundBrush}" />
+			<Setter Property="CornerRadius" Value="4" />
+			<Setter Property="Padding" Value="8,2" />
+		</Style>
+
+		<!-- ── Type / count badges ── -->
+		<Style Selector="Border.typeBadge">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="4" />
+			<Setter Property="Padding" Value="7,2" />
+		</Style>
+		<Style Selector="Border.countBadge">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
+			<Setter Property="CornerRadius" Value="8" />
+			<Setter Property="Padding" Value="6,1" />
+		</Style>
+
+		<!-- ── Category node highlight in sidebar ── -->
+		<Style Selector="Border.categoryNode">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
+			<Setter Property="CornerRadius" Value="5" />
+			<Setter Property="Padding" Value="6,4" />
+		</Style>
+
+		<!-- ── Error box ── -->
+		<Style Selector="Border.errorBox">
+			<Setter Property="Background" Value="{DynamicResource AppErrorBgBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppErrorBrush}" />
+			<Setter Property="BorderThickness" Value="3,0,0,0" />
+			<Setter Property="CornerRadius" Value="0,5,5,0" />
+			<Setter Property="Padding" Value="10,8" />
+		</Style>
+
+		<!-- ── Toolbar / header bar ── -->
+		<Style Selector="Border.toolbar">
+			<Setter Property="Background" Value="{DynamicResource AppToolbarBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="0,0,0,1" />
+			<Setter Property="Padding" Value="12,8" />
+		</Style>
+
+		<!-- ── Status bar ── -->
+		<Style Selector="Border.statusBar">
+			<Setter Property="Background" Value="{DynamicResource AppStatusBarBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="0,1,0,0" />
+			<Setter Property="Padding" Value="14,5" />
+		</Style>
+
+		<!-- ── Sidebar surface ── -->
+		<Style Selector="Border.sidebar">
+			<Setter Property="Background" Value="{DynamicResource AppSidebarBrush}" />
+		</Style>
+
+		<!-- ── Toolbar action buttons ── -->
+		<Style Selector="Button.toolBtn">
+			<Setter Property="Padding" Value="10,6" />
+			<Setter Property="CornerRadius" Value="5" />
+			<Setter Property="FontSize" Value="13" />
+		</Style>
+
+	</Application.Styles>
 </Application>

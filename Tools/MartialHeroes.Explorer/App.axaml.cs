@@ -1,15 +1,21 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
+using MartialHeroes.Explorer.Models;
+using MartialHeroes.Explorer.Plugins;
+using MartialHeroes.Explorer.Services;
 using MartialHeroes.Explorer.ViewModels;
 using MartialHeroes.Explorer.Views;
+using MartialHeroes.Tools.Shared.Configuration;
+using MartialHeroes.Tools.Shared.Extensions;
+using MartialHeroes.Tools.Shared.Navigation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MartialHeroes.Explorer;
 
-public partial class App : Application
+public class App : Application
 {
 	public override void Initialize()
 	{
@@ -20,13 +26,32 @@ public partial class App : Application
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			// Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-			// More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
 			DisableAvaloniaDataAnnotationValidation();
-			desktop.MainWindow = new MainWindow
-			{
-				DataContext = new MainWindowViewModel(),
-			};
+
+			var services = new ServiceCollection();
+			services.AddToolsCore<ExplorerConfiguration>("Explorer");
+
+			services.AddSingleton<MainWindowViewModel>();
+			services.AddTransient<SetupViewModel>();
+			services.AddTransient<ExplorerMainViewModel>();
+			services.AddTransient<FileBrowserViewModel>();
+			services.AddTransient<RecordEditorViewModel>();
+
+			services.AddSingleton<IFileDiscoveryService, FileDiscoveryService>();
+			services.AddSingleton<IRecordEditorService, RecordEditorService>();
+
+			var provider = services.BuildServiceProvider();
+
+			var mainVm = provider.GetRequiredService<MainWindowViewModel>();
+			desktop.MainWindow = new MainWindow { DataContext = mainVm };
+
+			var configService = provider.GetRequiredService<IConfigurationService<ExplorerConfiguration>>();
+			var navigation = provider.GetRequiredService<NavigationService>();
+
+			if (configService.Exists)
+				navigation.NavigateTo<ExplorerMainViewModel>();
+			else
+				navigation.NavigateTo<SetupViewModel>();
 		}
 
 		base.OnFrameworkInitializationCompleted();
@@ -34,14 +59,13 @@ public partial class App : Application
 
 	private void DisableAvaloniaDataAnnotationValidation()
 	{
-		// Get an array of plugins to remove
+		// Register our custom string-indexer accessor BEFORE Avalonia's built-in plugins,
+		// so [key]-style bindings work on EditableRecord (which has Item[string] but is not IList).
+		BindingPlugins.PropertyAccessors.Insert(0, StringIndexerPropertyAccessorPlugin.Instance);
+
 		var dataValidationPluginsToRemove =
 			BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
 
-		// remove each entry found
-		foreach (var plugin in dataValidationPluginsToRemove)
-		{
-			BindingPlugins.DataValidators.Remove(plugin);
-		}
+		foreach (var plugin in dataValidationPluginsToRemove) BindingPlugins.DataValidators.Remove(plugin);
 	}
 }

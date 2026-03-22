@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MartialHeroes.Explorer.ViewModels"
+             xmlns:loc="using:MartialHeroes.Explorer.Localization"
+             xmlns:shared="using:MartialHeroes.Tools.Shared.Localization"
+             mc:Ignorable="d" d:DesignWidth="920" d:DesignHeight="700"
+             x:Class="MartialHeroes.Explorer.Views.RecordEditorView"
+             x:DataType="vm:RecordEditorViewModel">
+
+	<Grid RowDefinitions="Auto,*" Background="{DynamicResource AppSurfaceBrush}">
+
+		<!-- ── Row 0: Toolbar — only visible when file loaded ── -->
+		<Border Grid.Row="0" Classes="toolbar"
+		        IsVisible="{Binding IsFileLoaded}">
+			<DockPanel>
+
+				<!-- Left: file info -->
+				<StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="8"
+				            VerticalAlignment="Center">
+					<TextBlock Text="📄" FontSize="15" VerticalAlignment="Center" />
+					<TextBlock Text="{Binding CurrentFileName}"
+					           FontWeight="SemiBold" FontSize="14"
+					           Foreground="{DynamicResource AppForegroundBrush}"
+					           VerticalAlignment="Center" />
+					<Border Classes="typeBadge" VerticalAlignment="Center">
+						<TextBlock Text="{Binding RecordTypeName}"
+						           FontSize="11"
+						           Foreground="{DynamicResource AppForegroundSecondaryBrush}" />
+					</Border>
+					<Border Classes="dirtyBadge" VerticalAlignment="Center"
+					        IsVisible="{Binding IsDirty}">
+						<TextBlock Text="{Binding ModificationDisplayText}"
+						           Foreground="{DynamicResource AppAmberBrush}"
+						           FontSize="11" FontWeight="SemiBold" />
+					</Border>
+				</StackPanel>
+
+				<!-- Right: filter -->
+				<TextBox DockPanel.Dock="Right"
+				         Text="{Binding FilterText, Mode=TwoWay}"
+				         Watermark="{x:Static loc:ExplorerStrings.Filter}"
+				         Width="200" CornerRadius="6" VerticalAlignment="Center" />
+
+				<!-- Center: actions -->
+				<StackPanel Orientation="Horizontal" Spacing="3"
+				            HorizontalAlignment="Center" VerticalAlignment="Center">
+					<Button Command="{Binding AddRecordCommand}" Classes="toolBtn">
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<TextBlock Text="➕" FontSize="12" VerticalAlignment="Center" />
+							<TextBlock Text="{x:Static loc:ExplorerStrings.Add}" />
+						</StackPanel>
+					</Button>
+					<Button Command="{Binding DeleteRecordCommand}" Classes="toolBtn">
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<TextBlock Text="🗑️" FontSize="12" VerticalAlignment="Center" />
+							<TextBlock Text="{x:Static loc:ExplorerStrings.Delete}" />
+						</StackPanel>
+					</Button>
+					<Border Width="1" Height="18" Margin="6,0"
+					        Background="{DynamicResource AppSeparatorBrush}" />
+					<Button Command="{Binding SaveCommand}" Classes="toolBtn accent">
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<TextBlock Text="💾" FontSize="12" VerticalAlignment="Center" />
+							<TextBlock Text="{x:Static shared:SharedStrings.Save}" />
+						</StackPanel>
+					</Button>
+				</StackPanel>
+
+			</DockPanel>
+		</Border>
+
+		<!-- ── Row 1: Content area ── -->
+
+		<!-- Empty state — centered overlay when no file loaded -->
+		<StackPanel Grid.Row="1"
+		            HorizontalAlignment="Center" VerticalAlignment="Center"
+		            Spacing="16" IsVisible="{Binding !IsFileLoaded}">
+			<TextBlock Text="📂" FontSize="52" HorizontalAlignment="Center"
+			           Opacity="0.3" />
+			<TextBlock Text="{x:Static loc:ExplorerStrings.SelectFilePrompt}"
+			           FontSize="15" HorizontalAlignment="Center"
+			           Foreground="{DynamicResource AppForegroundTertiaryBrush}" />
+		</StackPanel>
+
+		<!-- DataGrid — fills row 1 when a file is loaded -->
+		<DataGrid Grid.Row="1"
+		          x:Name="RecordsGrid"
+		          IsVisible="{Binding IsFileLoaded}"
+		          CanUserReorderColumns="True"
+		          CanUserResizeColumns="True"
+		          CanUserSortColumns="True"
+		          GridLinesVisibility="Horizontal"
+		          HorizontalGridLinesBrush="{DynamicResource AppSeparatorBrush}"
+		          IsReadOnly="False"
+		          AutoGenerateColumns="False"
+		          SelectionMode="Single"
+		          BorderThickness="0"
+		          HorizontalAlignment="Stretch"
+		          VerticalAlignment="Stretch" />
+
+	</Grid>
+</UserControl>

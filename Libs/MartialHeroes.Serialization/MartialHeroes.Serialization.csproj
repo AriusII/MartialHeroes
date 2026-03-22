@@ -6,12 +6,5 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-	
-	<ItemGroup>
-	  <Folder Include="DO\" />
-	  <Folder Include="SRC\" />
-	  <Folder Include="VFS\" />
-	  <Folder Include="XBN\" />
-	</ItemGroup>
 
 </Project>

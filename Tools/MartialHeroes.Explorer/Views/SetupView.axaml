@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MartialHeroes.Explorer.ViewModels"
+             xmlns:loc="using:MartialHeroes.Explorer.Localization"
+             xmlns:shared="using:MartialHeroes.Tools.Shared.Localization"
+             mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
+             x:Class="MartialHeroes.Explorer.Views.SetupView"
+             x:DataType="vm:SetupViewModel">
+
+	<Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+	      Background="{DynamicResource AppWindowBrush}">
+		<Border Classes="card" MaxWidth="520" MinWidth="420"
+		        BoxShadow="0 2 8 0 #30000000, 0 8 32 0 #18000000">
+			<StackPanel Spacing="24">
+
+				<!-- Hero -->
+				<StackPanel Spacing="10" HorizontalAlignment="Center">
+					<TextBlock Text="⚔️" FontSize="44" HorizontalAlignment="Center" />
+					<TextBlock Text="{x:Static loc:ExplorerStrings.WelcomeTitle}"
+					           FontSize="22" FontWeight="SemiBold"
+					           Foreground="{DynamicResource AppForegroundBrush}"
+					           HorizontalAlignment="Center" TextAlignment="Center" />
+					<TextBlock Text="{x:Static loc:ExplorerStrings.WelcomeDescription}"
+					           TextWrapping="Wrap" TextAlignment="Center"
+					           Foreground="{DynamicResource AppForegroundSecondaryBrush}"
+					           FontSize="13" MaxWidth="380" LineHeight="20" />
+				</StackPanel>
+
+				<!-- Divider -->
+				<Border Height="1" Background="{DynamicResource AppSeparatorBrush}" />
+
+				<!-- Path input -->
+				<StackPanel Spacing="6">
+					<TextBlock Text="{x:Static loc:ExplorerStrings.ExtractedDataPath}"
+					           FontWeight="SemiBold" FontSize="13"
+					           Foreground="{DynamicResource AppForegroundBrush}" />
+					<Grid ColumnDefinitions="*,8,Auto">
+						<TextBox Grid.Column="0"
+						         Text="{Binding DataPath, Mode=TwoWay}"
+						         Watermark="C:\path\to\extracted\data..."
+						         CornerRadius="6" />
+						<Button Grid.Column="2"
+						        Content="{x:Static shared:SharedStrings.Browse}"
+						        Command="{Binding BrowseCommand}"
+						        Padding="14,8" CornerRadius="6" />
+					</Grid>
+
+					<!-- Error message with left-border style -->
+					<Border Classes="errorBox"
+					        IsVisible="{Binding ErrorMessage,
+                                Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+						<StackPanel Orientation="Horizontal" Spacing="8">
+							<TextBlock Text="⚠" FontSize="14"
+							           Foreground="{DynamicResource AppErrorBrush}"
+							           VerticalAlignment="Center" />
+							<TextBlock Text="{Binding ErrorMessage}"
+							           Foreground="{DynamicResource AppErrorBrush}"
+							           FontSize="12" TextWrapping="Wrap"
+							           VerticalAlignment="Center" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+
+				<!-- Confirm -->
+				<Button Content="{x:Static shared:SharedStrings.Confirm}"
+				        Command="{Binding ConfirmCommand}"
+				        HorizontalAlignment="Stretch"
+				        HorizontalContentAlignment="Center"
+				        Classes="accent"
+				        Padding="0,12"
+				        FontSize="14" FontWeight="SemiBold"
+				        CornerRadius="7" />
+
+			</StackPanel>
+		</Border>
+	</Grid>
+</UserControl>

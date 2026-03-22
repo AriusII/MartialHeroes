@@ -1,15 +1,19 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
+using MartialHeroes.Packer.Models;
+using MartialHeroes.Packer.Services;
 using MartialHeroes.Packer.ViewModels;
 using MartialHeroes.Packer.Views;
+using MartialHeroes.Tools.Shared.Configuration;
+using MartialHeroes.Tools.Shared.Extensions;
+using MartialHeroes.Tools.Shared.Navigation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MartialHeroes.Packer;
 
-public partial class App : Application
+public class App : Application
 {
 	public override void Initialize()
 	{
@@ -20,28 +24,38 @@ public partial class App : Application
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			// Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-			// More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
 			DisableAvaloniaDataAnnotationValidation();
-			desktop.MainWindow = new MainWindow
-			{
-				DataContext = new MainWindowViewModel(),
-			};
+
+			var services = new ServiceCollection();
+			services.AddToolsCore<PackerConfiguration>("Packer");
+			services.AddTransient<SetupViewModel>();
+			services.AddTransient<PackerMainViewModel>();
+			services.AddTransient<MainWindowViewModel>();
+			services.AddSingleton<IPackerService, PackerService>();
+
+			var provider = services.BuildServiceProvider();
+
+			var mainVm = provider.GetRequiredService<MainWindowViewModel>();
+			desktop.MainWindow = new MainWindow { DataContext = mainVm };
+
+			var configService = provider.GetRequiredService<IConfigurationService<PackerConfiguration>>();
+			var navigationService = provider.GetRequiredService<NavigationService>();
+
+			if (configService.Exists)
+				navigationService.NavigateTo<PackerMainViewModel>(vm => _ = vm.InitializeAsync());
+			else
+				navigationService.NavigateTo<SetupViewModel>();
 		}
 
 		base.OnFrameworkInitializationCompleted();
 	}
 
-	private void DisableAvaloniaDataAnnotationValidation()
+	private static void DisableAvaloniaDataAnnotationValidation()
 	{
-		// Get an array of plugins to remove
 		var dataValidationPluginsToRemove =
 			BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
 
-		// remove each entry found
 		foreach (var plugin in dataValidationPluginsToRemove)
-		{
 			BindingPlugins.DataValidators.Remove(plugin);
-		}
 	}
 }

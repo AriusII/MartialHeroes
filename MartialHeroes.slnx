@@ -1,11 +1,13 @@
 <Solution>
-  <Folder Name="/Libs/">
-    <Project Path="Libs/MartialHeroes.Serialization/MartialHeroes.Serialization.csproj" />
-  </Folder>
-  <Folder Name="/SourceGenerators/" />
-  <Folder Name="/Srcs/" />
-  <Folder Name="/Tools/">
-    <Project Path="Tools/MartialHeroes.Explorer/MartialHeroes.Explorer.csproj" />
-    <Project Path="Tools/MartialHeroes.Packer/MartialHeroes.Packer.csproj" />
-  </Folder>
+	<Folder Name="/Libs/">
+		<Project Path="Libs/MartialHeroes.Serialization/MartialHeroes.Serialization.csproj"/>
+		<Project Path="Libs/MartialHeroes.Tools.Shared/MartialHeroes.Tools.Shared.csproj"/>
+	</Folder>
+	<Folder Name="/SourceGenerators/"/>
+	<Folder Name="/Srcs/"/>
+	<Folder Name="/Tests/"/>
+	<Folder Name="/Tools/">
+		<Project Path="Tools/MartialHeroes.Explorer/MartialHeroes.Explorer.csproj"/>
+		<Project Path="Tools/MartialHeroes.Packer/MartialHeroes.Packer.csproj"/>
+	</Folder>
 </Solution>

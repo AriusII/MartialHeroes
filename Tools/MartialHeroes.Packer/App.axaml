@@ -3,13 +3,210 @@
              x:Class="MartialHeroes.Packer.App"
              xmlns:local="using:MartialHeroes.Packer"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-  
-    <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+	<Application.DataTemplates>
+		<local:ViewLocator />
+	</Application.DataTemplates>
+
+	<!--
+        All custom brushes use opaque, clearly visible colors.
+        We avoid Fluent WinUI semi-transparent overlay resources
+        (CardBackgroundFillColor*, SubtleFillColor*, TextFillColor*, etc.)
+        which are near-invisible on plain dark window backgrounds.
+    -->
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key="AppWindowBrush" Color="#111111" />
+					<SolidColorBrush x:Key="AppSurfaceBrush" Color="#1E1E1E" />
+					<SolidColorBrush x:Key="AppSurfaceAltBrush" Color="#262626" />
+					<SolidColorBrush x:Key="AppToolbarBrush" Color="#161616" />
+					<SolidColorBrush x:Key="AppPathBgBrush" Color="#0D0D0D" />
+					<SolidColorBrush x:Key="AppBorderBrush" Color="#303030" />
+					<SolidColorBrush x:Key="AppSeparatorBrush" Color="#2A2A2A" />
+					<SolidColorBrush x:Key="AppForegroundBrush" Color="#F0F0F0" />
+					<SolidColorBrush x:Key="AppForegroundSecondaryBrush" Color="#A0A0A0" />
+					<SolidColorBrush x:Key="AppForegroundTertiaryBrush" Color="#585858" />
+					<SolidColorBrush x:Key="AppAccentBrush" Color="#0078D4" />
+					<SolidColorBrush x:Key="AppAccentForegroundBrush" Color="#60CDFF" />
+					<SolidColorBrush x:Key="AppSuccessBrush" Color="#4CAF50" />
+					<SolidColorBrush x:Key="AppSuccessBgBrush" Color="#182E3A2E" />
+					<SolidColorBrush x:Key="AppAmberBrush" Color="#FCB045" />
+					<SolidColorBrush x:Key="AppAmberBgBrush" Color="#20FCB045" />
+					<SolidColorBrush x:Key="AppErrorBrush" Color="#F44747" />
+					<SolidColorBrush x:Key="AppErrorBgBrush" Color="#28F44747" />
+				</ResourceDictionary>
+
+				<ResourceDictionary x:Key="Light">
+					<SolidColorBrush x:Key="AppWindowBrush" Color="#EBEBEB" />
+					<SolidColorBrush x:Key="AppSurfaceBrush" Color="#FFFFFF" />
+					<SolidColorBrush x:Key="AppSurfaceAltBrush" Color="#F5F5F5" />
+					<SolidColorBrush x:Key="AppToolbarBrush" Color="#FFFFFF" />
+					<SolidColorBrush x:Key="AppPathBgBrush" Color="#F0F0F0" />
+					<SolidColorBrush x:Key="AppBorderBrush" Color="#E0E0E0" />
+					<SolidColorBrush x:Key="AppSeparatorBrush" Color="#E5E5E5" />
+					<SolidColorBrush x:Key="AppForegroundBrush" Color="#1A1A1A" />
+					<SolidColorBrush x:Key="AppForegroundSecondaryBrush" Color="#5A5A5A" />
+					<SolidColorBrush x:Key="AppForegroundTertiaryBrush" Color="#9A9A9A" />
+					<SolidColorBrush x:Key="AppAccentBrush" Color="#0067C0" />
+					<SolidColorBrush x:Key="AppAccentForegroundBrush" Color="#0058A3" />
+					<SolidColorBrush x:Key="AppSuccessBrush" Color="#107C10" />
+					<SolidColorBrush x:Key="AppSuccessBgBrush" Color="#18107C10" />
+					<SolidColorBrush x:Key="AppAmberBrush" Color="#C47800" />
+					<SolidColorBrush x:Key="AppAmberBgBrush" Color="#18C47800" />
+					<SolidColorBrush x:Key="AppErrorBrush" Color="#C42B2B" />
+					<SolidColorBrush x:Key="AppErrorBgBrush" Color="#18C42B2B" />
+				</ResourceDictionary>
+
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
+
+	<Application.Styles>
+		<FluentTheme />
+
+		<!-- Window background from our theme dict -->
+		<Style Selector="Window">
+			<Setter Property="Background" Value="{DynamicResource AppWindowBrush}" />
+		</Style>
+
+		<!-- Card: clearly visible elevated surface -->
+		<Style Selector="Border.card">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="10" />
+			<Setter Property="Padding" Value="24" />
+		</Style>
+
+		<!-- Inner secondary / inset card -->
+		<Style Selector="Border.cardSecondary">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="8" />
+			<Setter Property="Padding" Value="14" />
+		</Style>
+
+		<!-- Section headers -->
+		<Style Selector="TextBlock.sectionHeader">
+			<Setter Property="FontSize" Value="15" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+		</Style>
+		<Style Selector="TextBlock.sectionHeader.green">
+			<Setter Property="Foreground" Value="{DynamicResource AppSuccessBrush}" />
+		</Style>
+		<Style Selector="TextBlock.sectionHeader.blue">
+			<Setter Property="Foreground" Value="{DynamicResource AppAccentForegroundBrush}" />
+		</Style>
+
+		<!-- Toolbar / header bar -->
+		<Style Selector="Border.toolbar">
+			<Setter Property="Background" Value="{DynamicResource AppToolbarBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="0,0,0,1" />
+			<Setter Property="Padding" Value="16,10" />
+		</Style>
+
+		<!-- Primary action button -->
+		<Style Selector="Button.action">
+			<Setter Property="Padding" Value="20,10" />
+			<Setter Property="CornerRadius" Value="7" />
+			<Setter Property="FontSize" Value="13" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+		</Style>
+
+		<!-- Cancel / secondary button -->
+		<Style Selector="Button.cancel">
+			<Setter Property="Padding" Value="20,10" />
+			<Setter Property="CornerRadius" Value="7" />
+			<Setter Property="FontSize" Value="13" />
+		</Style>
+
+		<!-- ProgressBar -->
+		<Style Selector="ProgressBar.custom">
+			<Setter Property="MinHeight" Value="6" />
+			<Setter Property="CornerRadius" Value="3" />
+		</Style>
+
+		<!-- Warning box — amber left accent border -->
+		<Style Selector="Border.warningBox">
+			<Setter Property="Background" Value="{DynamicResource AppAmberBgBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppAmberBrush}" />
+			<Setter Property="BorderThickness" Value="3,0,0,0" />
+			<Setter Property="CornerRadius" Value="0,5,5,0" />
+			<Setter Property="Padding" Value="10,8" />
+		</Style>
+
+		<!-- Monospace path display -->
+		<Style Selector="Border.pathDisplay">
+			<Setter Property="Background" Value="{DynamicResource AppPathBgBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="5" />
+			<Setter Property="Padding" Value="10,7" />
+		</Style>
+		<Style Selector="Border.pathDisplay > TextBlock">
+			<Setter Property="FontFamily" Value="Cascadia Mono,Consolas,monospace" />
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="TextTrimming" Value="CharacterEllipsis" />
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundSecondaryBrush}" />
+		</Style>
+
+		<!-- Left-edge accent stripe (used inside cards, full height) -->
+		<Style Selector="Border.accentStripeGreen">
+			<Setter Property="Background" Value="{DynamicResource AppSuccessBrush}" />
+		</Style>
+		<Style Selector="Border.accentStripeBlue">
+			<Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
+		</Style>
+
+		<!-- Validation circles -->
+		<Style Selector="Border.validIcon">
+			<Setter Property="Width" Value="22" />
+			<Setter Property="Height" Value="22" />
+			<Setter Property="CornerRadius" Value="11" />
+			<Setter Property="Background" Value="{DynamicResource AppSuccessBrush}" />
+		</Style>
+		<Style Selector="Border.invalidIcon">
+			<Setter Property="Width" Value="22" />
+			<Setter Property="Height" Value="22" />
+			<Setter Property="CornerRadius" Value="11" />
+			<Setter Property="Background" Value="{DynamicResource AppErrorBrush}" />
+		</Style>
+		<Style Selector="Border.neutralIcon">
+			<Setter Property="Width" Value="22" />
+			<Setter Property="Height" Value="22" />
+			<Setter Property="CornerRadius" Value="11" />
+			<Setter Property="Background" Value="{DynamicResource AppBorderBrush}" />
+		</Style>
+
+		<!-- Status text variants -->
+		<Style Selector="TextBlock.statusSuccess">
+			<Setter Property="Foreground" Value="{DynamicResource AppSuccessBrush}" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="FontSize" Value="12" />
+		</Style>
+		<Style Selector="TextBlock.statusError">
+			<Setter Property="Foreground" Value="{DynamicResource AppErrorBrush}" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="FontSize" Value="12" />
+		</Style>
+		<Style Selector="TextBlock.statusNeutral">
+			<Setter Property="Foreground" Value="{DynamicResource AppForegroundSecondaryBrush}" />
+			<Setter Property="FontSize" Value="12" />
+		</Style>
+
+		<!-- "optional" tag badge in SetupView -->
+		<Style Selector="Border.tagBadge">
+			<Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="4" />
+			<Setter Property="Padding" Value="6,2" />
+		</Style>
+
+	</Application.Styles>
 </Application>

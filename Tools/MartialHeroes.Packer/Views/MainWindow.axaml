@@ -1,20 +1,18 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:MartialHeroes.Packer.ViewModels"
+        xmlns:loc="using:MartialHeroes.Packer.Localization"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="780" d:DesignHeight="540"
         x:Class="MartialHeroes.Packer.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="MartialHeroes.Packer">
+        Title="{x:Static loc:PackerStrings.AppTitle}"
+        Width="780" Height="560"
+        MinWidth="680" MinHeight="480"
+        WindowStartupLocation="CenterScreen"
+        CanResize="True">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+	<ContentControl Content="{Binding Navigation.CurrentViewModel}" />
 </Window>

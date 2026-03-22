@@ -1,0 +1,138 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MartialHeroes.Packer.ViewModels"
+             xmlns:loc="using:MartialHeroes.Packer.Localization"
+             xmlns:shared="using:MartialHeroes.Tools.Shared.Localization"
+             mc:Ignorable="d" d:DesignWidth="780" d:DesignHeight="560"
+             x:Class="MartialHeroes.Packer.Views.SetupView"
+             x:DataType="vm:SetupViewModel">
+
+	<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+	              Background="{DynamicResource AppWindowBrush}">
+		<Border HorizontalAlignment="Center" VerticalAlignment="Center"
+		        Margin="32" MaxWidth="500">
+			<Border Classes="card">
+				<StackPanel Spacing="24">
+
+					<!-- Hero -->
+					<StackPanel Spacing="8" HorizontalAlignment="Center">
+						<TextBlock Text="📦" FontSize="44" HorizontalAlignment="Center" />
+						<TextBlock Text="{x:Static loc:PackerStrings.WelcomeTitle}"
+						           FontSize="22" FontWeight="SemiBold"
+						           Foreground="{DynamicResource AppForegroundBrush}"
+						           HorizontalAlignment="Center" TextAlignment="Center" />
+						<TextBlock Text="{x:Static loc:PackerStrings.WelcomeDescription}"
+						           TextWrapping="Wrap" TextAlignment="Center"
+						           Foreground="{DynamicResource AppForegroundSecondaryBrush}"
+						           FontSize="13" MaxWidth="400" LineHeight="20" />
+					</StackPanel>
+
+					<!-- Divider -->
+					<Border Height="1" Background="{DynamicResource AppSeparatorBrush}" />
+
+					<!-- Game Client Path -->
+					<StackPanel Spacing="6">
+						<TextBlock Text="{x:Static loc:PackerStrings.GameClientPath}"
+						           FontWeight="SemiBold" FontSize="13"
+						           Foreground="{DynamicResource AppForegroundBrush}" />
+						<Grid ColumnDefinitions="*,8,Auto">
+							<TextBox Grid.Column="0"
+							         Text="{Binding GameClientPath}"
+							         Watermark="C:\MartialHeroes"
+							         CornerRadius="6" />
+							<Button Grid.Column="2"
+							        Command="{Binding BrowseCommand}"
+							        CornerRadius="6" Padding="14,8">
+								<StackPanel Orientation="Horizontal" Spacing="5">
+									<TextBlock Text="📁" FontSize="13" />
+									<TextBlock Text="{x:Static shared:SharedStrings.Browse}" />
+								</StackPanel>
+							</Button>
+						</Grid>
+					</StackPanel>
+
+					<!-- Extract Output Path (optional) -->
+					<StackPanel Spacing="6">
+						<StackPanel Orientation="Horizontal" Spacing="8">
+							<TextBlock Text="{x:Static loc:PackerStrings.ExtractOutputPath}"
+							           FontWeight="SemiBold" FontSize="13"
+							           Foreground="{DynamicResource AppForegroundBrush}" />
+							<Border Classes="tagBadge" VerticalAlignment="Center">
+								<TextBlock Text="optional" FontSize="11"
+								           Foreground="{DynamicResource AppForegroundSecondaryBrush}" />
+							</Border>
+						</StackPanel>
+						<Grid ColumnDefinitions="*,8,Auto">
+							<TextBox Grid.Column="0"
+							         Text="{Binding ExtractOutputPath}"
+							         Watermark="{x:Static loc:PackerStrings.ExtractOutputPathPlaceholder}"
+							         CornerRadius="6" />
+							<Button Grid.Column="2"
+							        Command="{Binding BrowseExtractPathCommand}"
+							        CornerRadius="6" Padding="14,8">
+								<StackPanel Orientation="Horizontal" Spacing="5">
+									<TextBlock Text="📁" FontSize="13" />
+									<TextBlock Text="{x:Static shared:SharedStrings.Browse}" />
+								</StackPanel>
+							</Button>
+						</Grid>
+						<TextBlock Text="{x:Static loc:PackerStrings.ExtractOutputPathHint}"
+						           FontSize="11"
+						           Foreground="{DynamicResource AppForegroundTertiaryBrush}" />
+					</StackPanel>
+
+					<!-- Validation -->
+					<Border Classes="cardSecondary">
+						<StackPanel Spacing="10">
+							<TextBlock Text="{x:Static loc:PackerStrings.Validation}"
+							           FontWeight="SemiBold" FontSize="13"
+							           Foreground="{DynamicResource AppForegroundBrush}" />
+
+							<!-- data.inf -->
+							<StackPanel Orientation="Horizontal" Spacing="10">
+								<Border Classes="validIcon" IsVisible="{Binding IsInfValid}">
+									<TextBlock Text="✓" Foreground="White" FontSize="11" FontWeight="Bold"
+									           HorizontalAlignment="Center" VerticalAlignment="Center" />
+								</Border>
+								<Border Classes="invalidIcon" IsVisible="{Binding !IsInfValid}">
+									<TextBlock Text="✗" Foreground="White" FontSize="11" FontWeight="Bold"
+									           HorizontalAlignment="Center" VerticalAlignment="Center" />
+								</Border>
+								<TextBlock Text="data.inf" VerticalAlignment="Center" FontSize="13"
+								           Foreground="{DynamicResource AppForegroundBrush}"
+								           FontFamily="Cascadia Mono,Consolas,monospace" />
+							</StackPanel>
+
+							<!-- data/data.vfs -->
+							<StackPanel Orientation="Horizontal" Spacing="10">
+								<Border Classes="validIcon" IsVisible="{Binding IsVfsValid}">
+									<TextBlock Text="✓" Foreground="White" FontSize="11" FontWeight="Bold"
+									           HorizontalAlignment="Center" VerticalAlignment="Center" />
+								</Border>
+								<Border Classes="invalidIcon" IsVisible="{Binding !IsVfsValid}">
+									<TextBlock Text="✗" Foreground="White" FontSize="11" FontWeight="Bold"
+									           HorizontalAlignment="Center" VerticalAlignment="Center" />
+								</Border>
+								<TextBlock Text="data\data.vfs" VerticalAlignment="Center" FontSize="13"
+								           Foreground="{DynamicResource AppForegroundBrush}"
+								           FontFamily="Cascadia Mono,Consolas,monospace" />
+							</StackPanel>
+						</StackPanel>
+					</Border>
+
+					<!-- Confirm -->
+					<Button Command="{Binding ConfirmCommand}"
+					        HorizontalAlignment="Stretch"
+					        HorizontalContentAlignment="Center"
+					        Classes="accent action">
+						<TextBlock Text="{x:Static shared:SharedStrings.Confirm}"
+						           FontSize="14" FontWeight="SemiBold" />
+					</Button>
+
+				</StackPanel>
+			</Border>
+		</Border>
+	</ScrollViewer>
+</UserControl>

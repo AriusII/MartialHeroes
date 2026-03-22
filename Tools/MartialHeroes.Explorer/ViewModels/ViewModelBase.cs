@@ -1,7 +1,3 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
 namespace MartialHeroes.Explorer.ViewModels;
 
-public abstract class ViewModelBase : ObservableObject
-{
-}
+public abstract class ViewModelBase : Tools.Shared.ViewModels.ViewModelBase;
